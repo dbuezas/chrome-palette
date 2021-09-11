@@ -6,11 +6,11 @@ A SublimeText/Atom/Vscode style command palette for chrome!
 
 ## Features
 
-[x] Commands sorted by usage
-[x] Fuzzy search of commands
-[x] Search open tabs
-[x] Search history
-[x] Search in gdrive
+- [x] Commands sorted by usage
+- [x] Fuzzy search of commands
+- [x] Search open tabs
+- [x] Search history
+- [x] Search in gdrive
 
 ## Development
 
