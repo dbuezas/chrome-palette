@@ -22,6 +22,7 @@
   },
   "scripts": {
     "dev": "cp ./public/popup-dev.html ./dist/popup.html && craco start",
+    "zip":"zip -r dist.zip dist/",
     "start": "craco start & npm-watch & wait",
     "build": "./script/build.sh",
     "test": "craco test",
