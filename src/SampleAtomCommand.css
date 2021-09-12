@@ -6,9 +6,9 @@
   float: left;
 }
 .atom-timeAgo,
+.atom-keyword,
 .atom-shortcut {
   margin-right: 2px;
-  display: inline-block;
   margin-left: 0.45454545em;
   padding: 0 0.375em;
   line-height: 2;
@@ -22,6 +22,10 @@
 .atom-shortcut {
   color: #fff;
   background-color: #4d78cc;
+}
+.atom-keyword {
+  color: #fff;
+  background-color: rgb(49, 177, 79);
 }
 .atom-timeAgo {
   color: #757575;
@@ -44,7 +48,7 @@
 .atom-category.Tab {
   background: rgb(46, 41, 194);
 }
-.atom-category.Modifier {
+.atom-category.Search {
   background: rgb(49, 177, 79);
 }
 .atom-category.Drawer {

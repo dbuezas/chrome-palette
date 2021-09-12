@@ -21,7 +21,7 @@
     "history",
     "chrome://favicon/"
   ],
-  "content_security_policy": "img-src chrome://favicon;",
+  "content_security_policy": "script-src 'self'; object-src 'self'; img-src chrome://favicon;",
   "commands": {
     "_execute_browser_action": {
       "suggested_key": {

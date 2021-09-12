@@ -2,31 +2,22 @@
 
 import { useEffect, useState } from "react";
 import browser from "./browser";
-import { sortByUsed } from "./last-used";
-type CommandParam = {
-  setInputValue: (a: string) => void;
-  getInputValue: () => string;
-};
+import { resetHistory } from "./last-used";
 export type Command = {
   name: string;
   category?: string;
   shortcut?: string;
+  keyword?: string;
   command: Function;
 };
 
-function useDefaultCommands(commandParam: CommandParam) {
+function useDefaultCommands(
+  setInputValue: (a: string) => void,
+  inputValue: string
+) {
   const [commands, setCommands] = useState<Command[]>([]);
   useEffect(() => {
     const commands: Command[] = [
-      {
-        name: "Open Commander Options",
-        category: "Command",
-        command: async function () {
-          await browser.tabs.create({
-            url: `chrome-extension://${browser.runtime.id}/options.html`,
-          });
-        },
-      },
       {
         name: "New Tab",
         category: "Command",
@@ -41,34 +32,6 @@ function useDefaultCommands(commandParam: CommandParam) {
         category: "Command",
         command: async function () {
           await browser.windows.create({});
-        },
-      },
-      {
-        name: "Search Tabs",
-        category: "Modifier",
-        command: async function () {
-          commandParam.setInputValue("t>");
-        },
-      },
-      {
-        name: "Search History",
-        category: "Modifier",
-        command: async function () {
-          commandParam.setInputValue("h>");
-        },
-      },
-      {
-        name: "Search Google Drive",
-        category: "Modifier",
-        command: async function () {
-          const v = commandParam.getInputValue();
-          if (v.startsWith("gd>")) {
-            await browser.tabs.create({
-              url: `https://drive.google.com/drive/search?q=${v.slice(3)}`,
-            });
-          } else {
-            commandParam.setInputValue("gd>");
-          }
         },
       },
       {
@@ -349,9 +312,38 @@ function useDefaultCommands(commandParam: CommandParam) {
           await browser.tabs.update(currentTab.id!, { highlighted: true });
         },
       },
+      {
+        name: "Reset command history",
+        category: "Command",
+        command: async function () {
+          setTimeout(()=>{
+            // otherwise this command will be stored
+            resetHistory();
+            window.location.reload()
+          },0)
+        },
+      },
+      {
+        name: "Search Tabs",
+        category: "Search",
+        command: async function () {
+          setInputValue("t>");
+        },
+        keyword: "t>",
+      },
+      {
+        name: "Search History",
+        category: "Search",
+        command: async function () {
+          setInputValue("h>");
+        },
+        keyword: "h>",
+      },
     ];
-    setCommands(sortByUsed(commands));
-  }, []);
+    setCommands(commands);
+  }, [setInputValue]);
+  const query = inputValue.match(/^[a-z]{1,2}>(.*)/)?.[1];
+  if (query !== undefined) return [];
   return commands;
 }
 export default useDefaultCommands;

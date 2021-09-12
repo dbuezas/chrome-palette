@@ -1,6 +1,6 @@
 {
   "name": "chrome-palette",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": false,
   "author": "david.buezas@gmail.com",
   "dependencies": {
@@ -22,7 +22,6 @@
   },
   "scripts": {
     "dev": "cp ./public/popup-dev.html ./dist/popup.html && craco start",
-    "zip":"zip -r dist.zip dist/",
     "start": "craco start & npm-watch & wait",
     "build": "./script/build.sh",
     "test": "craco test",

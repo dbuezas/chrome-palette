@@ -1,191 +1,105 @@
-import React, { useRef, useState } from "react";
+import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
 import useDefaultCommands, { Command } from "./commands";
-//@ts-ignore
+//@ts-expect-error
 import CommandPalette from "react-command-palette";
 import "react-command-palette/dist/themes/chrome.css";
 import "react-command-palette/dist/themes/atom.css";
 import "react-command-palette/dist/themes/sublime.css";
 import "./App.css";
+import Header from "./Header";
 import SampleAtomCommand from "./SampleAtomCommand";
 import {
   useHistorySuggestions,
-  useShortcut,
   useSwitchTabSuggestions,
-} from "./hooks";
-import browser from "./browser";
-import { storeLastUsed } from "./last-used";
+  useTemplatedSuggestions,
+} from "./searchCommands";
 
+import { sortByUsed, storeLastUsed } from "./last-used";
 function App() {
+  const [, forceRender] = useState({});
   const commandPalette = useRef<any>(null);
-  const [isUsingSwitchTab, setIsUsingSwitchTab] = useState(false);
-  const [isUsingHistory, setIsUsingHistory] = useState(false);
-  const [isUsingGoogleDrive, setIsUsingGoogleDrive] = useState(false);
-  const [googleDriveCommand, setGoogleDriveCommand] = useState<Command[]>([]);
 
-  const shortcut = useShortcut();
-  const switchTabSuggestions = useSwitchTabSuggestions();
-  const historySuggestions = useHistorySuggestions();
-  const defaultCommands = useDefaultCommands({
-    setInputValue: (newValue: string) => {
-      commandPalette.current.onChange(
-        { targt: { value: newValue } },
-        {
-          newValue,
-        }
-      );
+  const input: HTMLInputElement | undefined =
+    commandPalette.current?.commandPaletteInput?.input;
+
+  const inputValue = input?.value || "";
+  const setInputValue = useCallback(
+    (newValue: string) => {
+      setTimeout(()=>{
+        // https://stackoverflow.com/a/46012210
+        var nativeInputValueSetter = Object!.getOwnPropertyDescriptor(
+          window.HTMLInputElement.prototype,
+          "value"
+        )!.set!;
+        nativeInputValueSetter.call(input, newValue);
+        var ev2 = new Event("input", { bubbles: true });
+        input?.dispatchEvent(ev2);
+      })
     },
-    getInputValue: () => commandPalette.current.commandPaletteInput.input.value,
-  });
-  const commands = isUsingGoogleDrive
-    ? googleDriveCommand
-    : isUsingSwitchTab
-    ? switchTabSuggestions
-    : isUsingHistory
-    ? historySuggestions
-    : defaultCommands;
+    [input]
+  );
+  (window as any).setInputValue = setInputValue;
+  const switchTabSuggestions = useSwitchTabSuggestions(
+    setInputValue,
+    inputValue
+  );
+  const historySuggestions = useHistorySuggestions(setInputValue, inputValue);
+  const templatedSuggestions = useTemplatedSuggestions(
+    setInputValue,
+    inputValue
+  );
+  const defaultCommands = useDefaultCommands(setInputValue, inputValue);
 
+  const newCommands = sortByUsed([
+    ...switchTabSuggestions,
+    ...historySuggestions,
+    ...defaultCommands,
+    ...templatedSuggestions,
+  ]);
+  // hack here to keep array reference, otherwise the CommandPalette library breaks
+  // The bug seems to be that when commands change, fuzzy matching is not rerun
+  let commands = useRef<Command[]>([]).current;
+  commands.length = 0;
+  commands.push(...newCommands);
+
+  // commands = newCommands
+  useLayoutEffect(()=>{
+    // blur + focus hack to let the lib know that it should recompute the matches
+    // even after changing commands      
+    input?.blur();
+    input?.focus();
+  })
   return (
-    <>
-      <CommandPalette
-        ref={commandPalette}
-        // alwaysRenderCommands
-        // closeOnSelect={false}
-        commands={commands}
-        // defaultInputValue={inputValue}
-        display="inline"
-        filterSearchQuery={(query: string) => {
-          if (["t>", "h>"].some((prefix) => query.startsWith(prefix))) {
-            return query.slice(2);
-          }
-          return query;
-        }}
-        getSuggestionValue={() => {
-          // hack to avoid that highlighting changes the value of the input
-          return commandPalette.current.commandPaletteInput.input.value;
-        }}
-        header={
-          <div
-            style={{
-              color: "rgb(172, 172, 172)",
-              display: "inline-block",
-              fontFamily: "arial",
-              fontSize: "12px",
-              marginBottom: "6px",
-            }}
-          >
-            <span style={{ paddingRight: "32px" }}>Search for a command</span>
-            <span style={{ paddingRight: "32px" }}>
-              <kbd
-                style={{
-                  backgroundColor: "rgb(23, 23, 23)",
-                  borderRadius: "4px",
-                  color: "#b9b9b9",
-                  fontSize: "12px",
-                  marginRight: "6px",
-                  padding: "2px 4px",
-                }}
-              >
-                ↑↓
-              </kbd>{" "}
-              to navigate
-            </span>
-            <span style={{ paddingRight: "32px" }}>
-              <kbd
-                style={{
-                  backgroundColor: "rgb(23, 23, 23)",
-                  borderRadius: "4px",
-                  color: "#b9b9b9",
-                  fontSize: "12px",
-                  marginRight: "6px",
-                  padding: "2px 4px",
-                }}
-              >
-                enter
-              </kbd>{" "}
-              to select
-            </span>
-            <span style={{ paddingRight: "32px" }}>
-              <kbd
-                style={{
-                  backgroundColor: "rgb(23, 23, 23)",
-                  borderRadius: "4px",
-                  color: "#b9b9b9",
-                  fontSize: "12px",
-                  marginRight: "6px",
-                  padding: "2px 4px",
-                }}
-              >
-                esc
-              </kbd>{" "}
-              to dismiss
-            </span>
-          </div>
+    <CommandPalette
+      ref={commandPalette}
+      commands={commands}
+      display="inline"
+      filterSearchQuery={(query: string) => {
+        if (["t>", "h>"].some((prefix) => query.startsWith(prefix))) {
+          return query.slice(2);
         }
-        // header={null}
-        // highlightFirstSuggestion
-        // hotKeys="command+shift+p"
-        maxDisplayed={400}
-        // onAfterOpen={function noRefCheck(){}}
-        onChange={(_0: any, val: string | null) => {
-          if (val !== null) {
-            setIsUsingSwitchTab(val.startsWith("t>"));
-            setIsUsingHistory(val.startsWith("h>"));
-            const gd = val.startsWith("gd>");
-            setIsUsingGoogleDrive(gd);
-            if (gd) {
-              const query =
-                commandPalette.current.commandPaletteInput.input.value.slice(3);
-              setGoogleDriveCommand([
-                {
-                  name: "Search Google Drive: " + query,
-                  category: "Modifier",
-                  command: async function () {
-                    await browser.tabs.create({
-                      url: `https://drive.google.com/drive/search?q=${query}`,
-                    });
-                  },
-                },
-              ]);
-            }
-          }
-        }}
-        // onHighlight={function noRefCheck(){}}
-        onRequestClose={() => {
-          window.close();
-        }}
-        onSelect={(command: Command) => {
-          storeLastUsed(command);
-        }}
-        // options={{
-        //   allowTypo: true,
-        //   key: 'name',
-        //   keys: [
-        //     'name'
-        //   ],
-        //   limit: 7,
-        //   scoreFn: null,
-        //   threshold: -Infinity
-        // }}
-        placeholder="Type 't>' to search open tabs, or 'h>' to search history history"
-        // reactModalParentSelector="body"
-        renderCommand={SampleAtomCommand}
-        // resetInputOnOpen={false}
-        // shouldReturnFocusAfterClose
-        showSpinnerOnSelect={false}
-      />
-      <span style={{ color: "gray", float: "right" }}>
-        shortcut: &nbsp;
-        <a
-          style={{ color: "white" }}
-          href="_blank"
-          onClick={() =>
-            browser.tabs.create({ url: "chrome://extensions/shortcuts" })
-          }
-        >
-          {shortcut}
-        </a>
-      </span>
-    </>
+        return query;
+      }}
+      onChange={() => {
+        // force rerender in case commands are input dependant
+        forceRender({});
+      }}
+      getSuggestionValue={() => {
+        // hack to avoid that highlighting changes the value of the input
+        return commandPalette.current.commandPaletteInput.input.value;
+      }}
+      header={<Header />}
+      maxDisplayed={50}
+      onRequestClose={() => {
+        window.close();
+      }}
+      onSelect={(command: Command) => {
+        storeLastUsed(command);
+      }}
+      placeholder="Search for a commands"
+      renderCommand={SampleAtomCommand}
+      showSpinnerOnSelect={false}
+    />
   );
 }
 

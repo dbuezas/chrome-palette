@@ -5,6 +5,7 @@ type Props = {
   name: string;
   highlight: string;
   shortcut?: string;
+  keyword?: string;
   category: string;
   timeAgo?: string;
   icon?: string;
@@ -13,6 +14,7 @@ export default function SampleAtomCommand({
   name,
   highlight,
   shortcut,
+  keyword,
   timeAgo,
   category,
   icon,
@@ -27,6 +29,7 @@ export default function SampleAtomCommand({
           <span>{name}</span>
           )}
       <span className="atom-shortcut">{shortcut}</span>
+      <span className="atom-keyword">{keyword}</span>
       <span className="atom-timeAgo">{timeAgo}</span>
     </div>
   );
