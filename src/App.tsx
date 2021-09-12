@@ -1,4 +1,4 @@
-import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import useDefaultCommands, { Command } from "./commands";
 //@ts-expect-error
 import CommandPalette from "react-command-palette";
@@ -64,7 +64,7 @@ function App() {
   commands.length = 0;
   commands.push(...newCommands);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     // blur + focus hack to let the lib know that it should recompute the matches
     // even after changing commands
     input?.blur();
