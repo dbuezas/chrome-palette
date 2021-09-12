@@ -25,7 +25,7 @@ function App() {
   const inputValue = input?.value || "";
   const setInputValue = useCallback(
     (newValue: string) => {
-      setTimeout(()=>{
+      setTimeout(() => {
         // https://stackoverflow.com/a/46012210
         var nativeInputValueSetter = Object!.getOwnPropertyDescriptor(
           window.HTMLInputElement.prototype,
@@ -34,7 +34,7 @@ function App() {
         nativeInputValueSetter.call(input, newValue);
         var ev2 = new Event("input", { bubbles: true });
         input?.dispatchEvent(ev2);
-      })
+      });
     },
     [input]
   );
@@ -58,27 +58,27 @@ function App() {
   ]);
   // hack here to keep array reference, otherwise the CommandPalette library breaks
   // The bug seems to be that when commands change, fuzzy matching is not rerun
+  // and all commands are shown without filtering.
+  // without this, the UI flickers
   let commands = useRef<Command[]>([]).current;
   commands.length = 0;
   commands.push(...newCommands);
 
-  // commands = newCommands
-  useLayoutEffect(()=>{
+  useLayoutEffect(() => {
     // blur + focus hack to let the lib know that it should recompute the matches
-    // even after changing commands      
+    // even after changing commands
     input?.blur();
     input?.focus();
-  })
+  });
   return (
     <CommandPalette
       ref={commandPalette}
       commands={commands}
       display="inline"
-      filterSearchQuery={(query: string) => {
-        if (["t>", "h>"].some((prefix) => query.startsWith(prefix))) {
-          return query.slice(2);
-        }
-        return query;
+      filterSearchQuery={(inputValue: string) => {
+        const query = inputValue.match(/^[a-z]{1,2}>(.*)/)?.[1];
+        if (query !== undefined) return query;
+        return inputValue;
       }}
       onChange={() => {
         // force rerender in case commands are input dependant
@@ -88,8 +88,18 @@ function App() {
         // hack to avoid that highlighting changes the value of the input
         return commandPalette.current.commandPaletteInput.input.value;
       }}
+      options={{
+        threshold: -10000,
+        // threshold: -Infinity, // Don't return matches worse than this (higher is faster)
+        limit: 100, // Don't return more results than this (lower is faster)
+        // allowTypo: true, // Allwos a snigle transpoes (false is faster)
+        allowTypo: false, // Allwos a snigle transpoes (false is faster)
+        key: "name", // For when targets are objects (see its example usage)
+        keys: ["name"], // For when targets are objects (see its example usage)
+        scoreFn: null, // For use with `keys` (see its example usage)
+      }}
       header={<Header />}
-      maxDisplayed={50}
+      maxDisplayed={100}
       onRequestClose={() => {
         window.close();
       }}
