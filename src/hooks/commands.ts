@@ -287,7 +287,8 @@ function useDefaultCommands({
         name: "Deattach Tab (Move to New Window)",
         category: "Command",
         command: async function () {
-          const tab = await browser.tabs.getCurrent();
+          const [tab] = await browser.tabs.query({ currentWindow: true, active: true })
+          console.log(tab)
           await browser.windows.create({ tabId: tab.id });
         },
       },
@@ -295,7 +296,7 @@ function useDefaultCommands({
         name: "Reattach Tab (Move Tab to Previous Window)",
         category: "Command",
         command: async function () {
-          const currentTab = await browser.tabs.getCurrent();
+          const [currentTab] = await browser.tabs.query({ currentWindow: true, active: true })
           const currentWindow = await browser.windows.getCurrent({
             // windowTypes: ["normal"],
           });

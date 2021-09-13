@@ -2,11 +2,8 @@ import { useEffect, useState } from "react";
 import { Command } from "./commands";
 import { formatDistance } from "date-fns";
 import { parseCommand } from "./parseCommand";
+import browser from "../browser";
 
-let browser: typeof import("webextension-polyfill");
-if (process.env.NODE_ENV === "production") {
-  browser = require("webextension-polyfill");
-}
 export type UseSuggestionParam = {
   setInputValue: (a: string) => void;
   inputValue: string;
