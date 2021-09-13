@@ -1,8 +1,10 @@
 // adapted from https://github.com/ssundarraj/commander/blob/master/src/js/actions.js
 
 import { useEffect, useState } from "react";
-import browser from "./browser";
-import { resetHistory } from "./last-used";
+import browser from "../browser";
+import { resetHistory } from "../last-used";
+import { parseCommand } from "./parseCommand";
+import { UseSuggestionParam } from "./searchCommands";
 export type Command = {
   name: string;
   category?: string;
@@ -11,10 +13,10 @@ export type Command = {
   command: Function;
 };
 
-function useDefaultCommands(
-  setInputValue: (a: string) => void,
-  inputValue: string
-) {
+function useDefaultCommands({
+  setInputValue,
+  inputValue,
+}: UseSuggestionParam) {
   const [commands, setCommands] = useState<Command[]>([]);
   useEffect(() => {
     const commands: Command[] = [
@@ -342,8 +344,8 @@ function useDefaultCommands(
     ];
     setCommands(commands);
   }, [setInputValue]);
-  const query = inputValue.match(/^[a-z]{1,2}>(.*)/)?.[1];
-  if (query !== undefined) return [];
+  const {didMatch} = parseCommand(inputValue);
+  if (didMatch) return [];
   return commands;
 }
 export default useDefaultCommands;

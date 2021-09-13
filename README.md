@@ -63,3 +63,7 @@ npm start
 ## Full Manual testing
 
 Import the dist folder as an unpacked extension in chrome. This folder is rebuilt on changes when using `npm start`
+
+# Previous art
+
+- Commander: https://github.com/ssundarraj/commander

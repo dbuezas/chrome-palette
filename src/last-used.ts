@@ -1,4 +1,4 @@
-import { Command } from "./commands";
+import { Command } from "./hooks/commands";
 
 export function resetHistory() {
   localStorage.lastUsed = "";

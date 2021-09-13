@@ -1,16 +1,21 @@
 import { useEffect, useState } from "react";
 import { Command } from "./commands";
 import { formatDistance } from "date-fns";
+import { parseCommand } from "./parseCommand";
 
 let browser: typeof import("webextension-polyfill");
 if (process.env.NODE_ENV === "production") {
   browser = require("webextension-polyfill");
 }
+export type UseSuggestionParam = {
+  setInputValue: (a: string) => void;
+  inputValue: string;
+};
 
-export function useSwitchTabSuggestions(
-  setInputValue: (a: string) => void,
-  inputValue: string
-) {
+export function useSwitchTabSuggestions({
+  setInputValue,
+  inputValue,
+}: UseSuggestionParam) {
   const [commands, setCommands] = useState<Command[]>([]);
   useEffect(() => {
     const fetch = async () => {
@@ -23,24 +28,24 @@ export function useSwitchTabSuggestions(
         command: () => {
           browser.tabs.update(id, { active: true });
           browser.windows.update(windowId!, { focused: true });
+          window.close();
         },
       }));
       setCommands(actions);
     };
     fetch().catch((e) => console.log(e));
   }, []);
-
-  const query = inputValue.match(/^t>(.*)/)?.[1];
-  if (query !== undefined) return commands;
+  const { keyword } = parseCommand(inputValue);
+  if (keyword === "t") return commands;
   return [];
 }
 function isDefined<T>(a: T | null): a is T {
   return Boolean(a);
 }
-export function useHistorySuggestions(
-  setInputValue: (a: string) => void,
-  inputValue: string
-) {
+export function useHistorySuggestions({
+  setInputValue,
+  inputValue,
+}: UseSuggestionParam) {
   const [commands, setCommands] = useState<Command[]>([]);
   useEffect(() => {
     const fetch = async () => {
@@ -73,8 +78,8 @@ export function useHistorySuggestions(
     };
     fetch().catch();
   }, []);
-  const query = inputValue.match(/^h>(.*)/)?.[1];
-  if (query !== undefined) return commands;
+  const { keyword } = parseCommand(inputValue);
+  if (keyword === "h") return commands;
   return [];
 }
 
@@ -106,15 +111,14 @@ const templates: Template[] = [
   },
 ];
 
-export function useTemplatedSuggestions(
-  setInputValue: (a: string) => void,
-  inputValue: string
-) {
-  const [matched, keyword, query] =
-    inputValue.match(/^([a-z]{1,2})>(.*)/) || [];
-  if (matched) {
+export function useTemplatedSuggestions({
+  setInputValue,
+  inputValue,
+}: UseSuggestionParam) {
+  const { didMatch, keyword, query } = parseCommand(inputValue);
+  if (didMatch) {
     for (const template of templates) {
-      if (keyword === template.keyword) {
+      if (keyword.toLowerCase() === template.keyword.toLowerCase()) {
         return [
           {
             name: `Search ${template.name}: ${query}`,
