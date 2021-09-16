@@ -31,5 +31,8 @@
         "linux": "Ctrl+Shift+P"
       }
     }
-  }
+  },
+  "web_accessible_resources": [
+    "date.txt"
+  ]
 }

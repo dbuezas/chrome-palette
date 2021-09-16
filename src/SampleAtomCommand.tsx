@@ -22,12 +22,12 @@ export default function SampleAtomCommand({
   return (
     <div className="atom-item">
       <span className={`atom-category ${category}`}>{category}</span>
-      <img className={"atom-icon"} src={icon} alt=""></img>
+      {icon && <img className={"atom-icon"} src={icon} alt=""></img>}
       {highlight ? (
         <span dangerouslySetInnerHTML={{ __html: highlight }} />
-        ) : (
-          <span>{name}</span>
-          )}
+      ) : (
+        <span>{name}</span>
+      )}
       <span className="atom-shortcut">{shortcut}</span>
       <span className="atom-keyword">{keyword}</span>
       <span className="atom-timeAgo">{timeAgo}</span>

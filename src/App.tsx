@@ -1,8 +1,4 @@
-import React, {
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { useEffect, useRef, useState } from "react";
 import useDefaultCommands, { Command } from "./hooks/commands";
 //@ts-expect-error
 import CommandPalette from "react-command-palette";
@@ -13,6 +9,7 @@ import "./App.css";
 import Header from "./Header";
 import SampleAtomCommand from "./SampleAtomCommand";
 import {
+  useAudibleTabSuggestions,
   useHistorySuggestions,
   useSwitchTabSuggestions,
   useTemplatedSuggestions,
@@ -27,6 +24,7 @@ function App() {
   const commandPalette = useRef<any>(null);
   const input = usePaletteInput(commandPalette);
   const commands = sortByUsed([
+    ...useAudibleTabSuggestions(input),
     ...useSwitchTabSuggestions(input),
     ...useHistorySuggestions(input),
     ...useDefaultCommands(input),
@@ -76,7 +74,10 @@ function App() {
       onSelect={(command: Command) => {
         storeLastUsed(command);
       }}
-      placeholder="Search for a commands"
+      onHighlight={(command?: Command) => {
+          command?.onHighlighted?.();
+      }}
+      placeholder="Search for a command"
       renderCommand={SampleAtomCommand}
       showSpinnerOnSelect={false}
     />

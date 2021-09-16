@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./Header.css";
-import browser from "./browser";
+import browser from "webextension-polyfill";
 
 function useShortcut() {
   const [shortcut, setShortcut] = useState("unset");

@@ -1,7 +1,7 @@
 // adapted from https://github.com/ssundarraj/commander/blob/master/src/js/actions.js
 
 import { useEffect, useState } from "react";
-import browser from "../browser";
+import browser from "webextension-polyfill";
 import { resetHistory } from "../last-used";
 import { parseCommand } from "./parseCommand";
 import { UseSuggestionParam } from "./searchCommands";
@@ -11,6 +11,7 @@ export type Command = {
   shortcut?: string;
   keyword?: string;
   command: Function;
+  onHighlighted?: Function;
 };
 
 function useDefaultCommands({
@@ -341,6 +342,13 @@ function useDefaultCommands({
           setInputValue("h>");
         },
         keyword: "h>",
+      },
+      {
+        name: "Throw error",
+        category: "Dev",
+        command: async function () {
+          throw new Error("on purpose")
+        },
       },
     ];
     setCommands(commands);
