@@ -1,6 +1,6 @@
 {
   "name": "chrome-palette",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "private": false,
   "author": "david.buezas@gmail.com",
   "dependencies": {
@@ -18,8 +18,8 @@
     "ws": "^8.2.2"
   },
   "scripts": {
-    "start": "node script/build.js",
-    "build": "NODE_ENV=production node script/build.js",
+    "start": "node script/build.mjs",
+    "build": "NODE_ENV=production node script/build.mjs",
     "upgrade": "npx npm-check -u"
   },
   "devDependencies": {

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import browser from "webextension-polyfill";
 import { resetHistory } from "../last-used";
 import { parseCommand } from "./parseCommand";
-import { UseSuggestionParam } from "./searchCommands";
+import { UseSuggestionParam } from "./websitesCommands";
 export type Command = {
   name: string;
   category?: string;
@@ -14,10 +14,7 @@ export type Command = {
   onHighlighted?: Function;
 };
 
-function useDefaultCommands({
-  setInputValue,
-  inputValue,
-}: UseSuggestionParam) {
+function useDefaultCommands({ setInputValue, inputValue }: UseSuggestionParam) {
   const [commands, setCommands] = useState<Command[]>([]);
   useEffect(() => {
     const commands: Command[] = [
@@ -288,8 +285,11 @@ function useDefaultCommands({
         name: "Deattach Tab (Move to New Window)",
         category: "Command",
         command: async function () {
-          const [tab] = await browser.tabs.query({ currentWindow: true, active: true })
-          console.log(tab)
+          const [tab] = await browser.tabs.query({
+            currentWindow: true,
+            active: true,
+          });
+          console.log(tab);
           await browser.windows.create({ tabId: tab.id });
         },
       },
@@ -297,7 +297,10 @@ function useDefaultCommands({
         name: "Reattach Tab (Move Tab to Previous Window)",
         category: "Command",
         command: async function () {
-          const [currentTab] = await browser.tabs.query({ currentWindow: true, active: true })
+          const [currentTab] = await browser.tabs.query({
+            currentWindow: true,
+            active: true,
+          });
           const currentWindow = await browser.windows.getCurrent({
             // windowTypes: ["normal"],
           });
@@ -320,40 +323,26 @@ function useDefaultCommands({
         name: "Reset command history",
         category: "Command",
         command: async function () {
-          setTimeout(()=>{
+          setTimeout(() => {
             // otherwise this command will be stored
             resetHistory();
-            window.location.reload()
-          },0)
-        },
-      },
-      {
-        name: "Search Tabs",
-        category: "Search",
-        command: async function () {
-          setInputValue("t>");
-        },
-        keyword: "t>",
-      },
-      {
-        name: "Search History",
-        category: "Search",
-        command: async function () {
-          setInputValue("h>");
-        },
-        keyword: "h>",
-      },
-      {
-        name: "Throw error",
-        category: "Dev",
-        command: async function () {
-          throw new Error("on purpose")
+            window.location.reload();
+          }, 0);
         },
       },
     ];
+    if (process.env.NODE_ENV !== "production") {
+      commands.push({
+        name: "Throw error",
+        category: "Dev",
+        command: async function () {
+          throw new Error("on purpose");
+        },
+      });
+    }
     setCommands(commands);
   }, [setInputValue]);
-  const {didMatch} = parseCommand(inputValue);
+  const { didMatch } = parseCommand(inputValue);
   if (didMatch) return [];
   return commands;
 }

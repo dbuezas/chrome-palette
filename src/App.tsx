@@ -8,12 +8,11 @@ import "react-command-palette/dist/themes/sublime.css";
 import "./App.css";
 import Header from "./Header";
 import SampleAtomCommand from "./SampleAtomCommand";
-import {
-  useAudibleTabSuggestions,
-  useHistorySuggestions,
-  useSwitchTabSuggestions,
-  useTemplatedSuggestions,
-} from "./hooks/searchCommands";
+import { useTemplatedSuggestions } from "./hooks/websitesCommands";
+import { useAudibleTabSuggestions } from "./hooks/audioCommands";
+import { useSwitchTabSuggestions } from "./hooks/tabsCommands";
+import { useHistorySuggestions } from "./hooks/historyCommands";
+import { useBookmarkSuggestions } from "./hooks/bookmarkCommands";
 
 import { sortByUsed, storeLastUsed } from "./last-used";
 import usePaletteInput from "./hooks/usePaletteInput";
@@ -24,10 +23,11 @@ function App() {
   const commandPalette = useRef<any>(null);
   const input = usePaletteInput(commandPalette);
   const commands = sortByUsed([
-    ...useAudibleTabSuggestions(input),
-    ...useSwitchTabSuggestions(input),
-    ...useHistorySuggestions(input),
     ...useDefaultCommands(input),
+    ...useAudibleTabSuggestions(input),
+    ...useSwitchTabSuggestions("t", input),
+    ...useHistorySuggestions("h", input),
+    ...useBookmarkSuggestions("b", input),
     ...useTemplatedSuggestions(input),
   ]);
 
@@ -75,7 +75,7 @@ function App() {
         storeLastUsed(command);
       }}
       onHighlight={(command?: Command) => {
-          command?.onHighlighted?.();
+        command?.onHighlighted?.();
       }}
       placeholder="Search for a command"
       renderCommand={SampleAtomCommand}

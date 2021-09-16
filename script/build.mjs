@@ -1,8 +1,8 @@
 // @ts-check
-const { WebSocketServer } = (WebSocket = require("ws"));
-const chokidar = require("chokidar");
-const { execSync } = require("child_process");
-const esbuild = require("esbuild");
+import WebSocket, { WebSocketServer } from "ws";
+import chokidar from "chokidar";
+import { execSync } from "child_process";
+import esbuild from "esbuild";
 
 const date = new Date().toString();
 const isProd = process.env.NODE_ENV === "production";
@@ -40,7 +40,7 @@ async function build() {
   console.log(text);
 
   if (isProd) {
-    execSync("rm chrome-palette.zip");
+    execSync("rm -f chrome-palette.zip");
     execSync("zip -r chrome-palette.zip dist/");
   } else {
     const wss = new WebSocketServer({ port: 8081 });

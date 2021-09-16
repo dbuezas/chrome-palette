@@ -46,6 +46,9 @@
 .atom-category.History {
   background: rgb(165, 22, 134);
 }
+.atom-category.Bookmark {
+  background: rgb(77, 22, 165);
+}
 .atom-category.Tab {
   background: rgb(46, 41, 194);
 }
@@ -60,4 +63,7 @@
 }
 .atom-suggestion {
   font-weight: 300;
+}
+.atom-item {
+  word-break: break-all;
 }

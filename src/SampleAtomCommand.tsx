@@ -19,15 +19,18 @@ export default function SampleAtomCommand({
   category,
   icon,
 }: Props) {
+  const __html = (highlight ? highlight : name).replace(/\n/g, "<br />");
   return (
     <div className="atom-item">
       <span className={`atom-category ${category}`}>{category}</span>
       {icon && <img className={"atom-icon"} src={icon} alt=""></img>}
-      {highlight ? (
-        <span dangerouslySetInnerHTML={{ __html: highlight }} />
-      ) : (
-        <span>{name}</span>
-      )}
+      {
+        <span
+          dangerouslySetInnerHTML={{
+            __html,
+          }}
+        />
+      }
       <span className="atom-shortcut">{shortcut}</span>
       <span className="atom-keyword">{keyword}</span>
       <span className="atom-timeAgo">{timeAgo}</span>
