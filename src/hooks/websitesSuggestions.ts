@@ -1,4 +1,4 @@
-import { parseCommand } from "./parseCommand";
+import { parseInputCommand } from "./parseInputCommand";
 import browser from "webextension-polyfill";
 
 export type UseSuggestionParam = {
@@ -38,7 +38,7 @@ export function useTemplatedSuggestions({
   setInputValue,
   inputValue,
 }: UseSuggestionParam) {
-  const { didMatch, keyword, query } = parseCommand(inputValue);
+  const { didMatch, keyword, query } = parseInputCommand(inputValue);
   if (didMatch) {
     for (const template of templates) {
       if (keyword.toLowerCase() === template.keyword.toLowerCase()) {

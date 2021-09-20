@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 import browser from "webextension-polyfill";
 import { resetHistory } from "../last-used";
-import { parseCommand } from "./parseCommand";
-import { UseSuggestionParam } from "./websitesCommands";
+import { parseInputCommand } from "./parseInputCommand";
+import { UseSuggestionParam } from "./websitesSuggestions";
 export type Command = {
   name: string;
   category?: string;
@@ -14,7 +14,10 @@ export type Command = {
   onHighlighted?: Function;
 };
 
-function useDefaultCommands({ setInputValue, inputValue }: UseSuggestionParam) {
+function useCommandSuggestions({
+  setInputValue,
+  inputValue,
+}: UseSuggestionParam) {
   const [commands, setCommands] = useState<Command[]>([]);
   useEffect(() => {
     const commands: Command[] = [
@@ -342,8 +345,8 @@ function useDefaultCommands({ setInputValue, inputValue }: UseSuggestionParam) {
     }
     setCommands(commands);
   }, [setInputValue]);
-  const { didMatch } = parseCommand(inputValue);
+  const { didMatch } = parseInputCommand(inputValue);
   if (didMatch) return [];
   return commands;
 }
-export default useDefaultCommands;
+export default useCommandSuggestions;

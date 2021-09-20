@@ -1,6 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
-export default function HotRefresh() {
+const HotRefresh: React.FC = ({ children }) => {
+  const [error, setError] = useState("");
   if (process.env.NODE_ENV !== "production") {
     useEffect(() => {
       const socket = new WebSocket("ws://localhost:8081");
@@ -11,9 +12,11 @@ export default function HotRefresh() {
         console.log("Message from server ", event);
         const { action, payload } = JSON.parse(event.data);
         if (action === "update-app") window.location.reload();
+        if (action === "error") setError(payload);
       });
       return () => socket.close();
     }, []);
   }
-  return <></>;
-}
+  return error ? <>{error}</> : <>{children}</>;
+};
+export default HotRefresh;

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import useDefaultCommands, { Command } from "./hooks/commands";
+import useCommandSuggestions, { Command } from "./hooks/commandsSuggestions";
 //@ts-expect-error
 import CommandPalette from "react-command-palette";
 import "react-command-palette/dist/themes/chrome.css";
@@ -8,22 +8,22 @@ import "react-command-palette/dist/themes/sublime.css";
 import "./App.css";
 import Header from "./Header";
 import SampleAtomCommand from "./SampleAtomCommand";
-import { useTemplatedSuggestions } from "./hooks/websitesCommands";
-import { useAudibleTabSuggestions } from "./hooks/audioCommands";
-import { useSwitchTabSuggestions } from "./hooks/tabsCommands";
-import { useHistorySuggestions } from "./hooks/historyCommands";
-import { useBookmarkSuggestions } from "./hooks/bookmarkCommands";
+import { useTemplatedSuggestions } from "./hooks/websitesSuggestions";
+import { useAudibleTabSuggestions } from "./hooks/audioSuggestions";
+import { useSwitchTabSuggestions } from "./hooks/tabsSuggestions";
+import { useHistorySuggestions } from "./hooks/historySuggestions";
+import { useBookmarkSuggestions } from "./hooks/bookmarkSuggestions";
 
 import { sortByUsed, storeLastUsed } from "./last-used";
 import usePaletteInput from "./hooks/usePaletteInput";
-import { parseCommand } from "./hooks/parseCommand";
+import { parseInputCommand } from "./hooks/parseInputCommand";
 
 function App() {
   const [, forceRender] = useState({});
   const commandPalette = useRef<any>(null);
   const input = usePaletteInput(commandPalette);
   const commands = sortByUsed([
-    ...useDefaultCommands(input),
+    ...useCommandSuggestions(input),
     ...useAudibleTabSuggestions(input),
     ...useSwitchTabSuggestions("t", input),
     ...useHistorySuggestions("h", input),
@@ -46,7 +46,7 @@ function App() {
       commands={commands}
       display="inline"
       filterSearchQuery={(inputValue: string) => {
-        const { didMatch, query } = parseCommand(inputValue);
+        const { didMatch, query } = parseInputCommand(inputValue);
         if (didMatch) return query;
         return inputValue;
       }}

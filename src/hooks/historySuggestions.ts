@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
-import { Command } from "./commands";
+import { useEffect, useRef, useState } from "react";
+import { Command } from "./commandsSuggestions";
 import { formatDistance } from "date-fns";
-import { parseCommand } from "./parseCommand";
+import { parseInputCommand } from "./parseInputCommand";
 import browser from "webextension-polyfill";
-import { UseSuggestionParam } from "./websitesCommands";
+import { UseSuggestionParam } from "./websitesSuggestions";
 
 export function isDefined<T>(a: T | null): a is T {
   return Boolean(a);
@@ -13,11 +13,12 @@ export function useHistorySuggestions(
   { setInputValue, inputValue }: UseSuggestionParam
 ) {
   const [commands, setCommands] = useState<Command[]>([]);
-  const { didMatch, keyword } = parseCommand(inputValue);
+  const { didMatch, keyword } = parseInputCommand(inputValue);
   const myMatch = keyword === KEYWORD;
-  if (myMatch && commands.length === 0) {
+  const didFetch = useRef(false);
+  if (myMatch && !didFetch.current) {
+    didFetch.current = true;
     const fetch = async () => {
-      console.log("recompute");
       if (!browser) return;
       const list = await browser.history.search({
         text: "",

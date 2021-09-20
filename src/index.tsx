@@ -7,8 +7,9 @@ import HotRefresh from "./hot-refresh";
 
 ReactDOM.render(
   <React.StrictMode>
-    <HotRefresh />
-    <App />
+    <HotRefresh>
+      <App />
+    </HotRefresh>
   </React.StrictMode>,
   document.getElementById("root")
 );

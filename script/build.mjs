@@ -46,7 +46,9 @@ async function build() {
     const wss = new WebSocketServer({ port: 8081 });
     wss.on("connection", () => console.log(wss.clients.size));
     wss.on("close", () => console.log(wss.clients.size));
-    const sendToClients = (/** @type {{ action: string; }} */ message) => {
+    const sendToClients = (
+      /** @type {{ action: string; payload?: any }} */ message
+    ) => {
       wss.clients.forEach(function each(
         /** @type {{ readyState: number; send: (arg0: string) => void; }} */ client
       ) {
@@ -63,8 +65,13 @@ async function build() {
     });
     chokidar.watch("src", watchOptn).on("all", async (...args) => {
       console.log(args);
-      await result.rebuild?.();
-      sendToClients({ action: "update-app" });
+      try {
+        await result.rebuild?.();
+        sendToClients({ action: "update-app" });
+      } catch (e) {
+        console.error(e);
+        sendToClients({ action: "error", payload: e.message });
+      }
     });
   }
 }

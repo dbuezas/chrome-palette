@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { Command } from "./commands";
+import { Command } from "./commandsSuggestions";
 import browser from "webextension-polyfill";
-import { UseSuggestionParam } from "./websitesCommands";
-import { parseCommand } from "./parseCommand";
+import { UseSuggestionParam } from "./websitesSuggestions";
+import { parseInputCommand } from "./parseInputCommand";
 
 export function useAudibleTabSuggestions({
   setInputValue,
@@ -36,9 +36,9 @@ export function useAudibleTabSuggestions({
       }
       setCommands(actions);
     };
-    fetch().catch((e) => console.log(e));
+    fetch();
   }, []);
-  const { didMatch } = parseCommand(inputValue);
+  const { didMatch } = parseInputCommand(inputValue);
   if (didMatch) return [];
   return commands;
 }
