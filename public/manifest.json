@@ -15,7 +15,6 @@
   },
   "permissions": [
     "tabs",
-    "storage",
     "sessions",
     "bookmarks",
     "history",
