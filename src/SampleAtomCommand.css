@@ -1,3 +1,6 @@
+body .atom-suggestionsContainerOpen {
+  max-height: 330px;
+}
 .atom-category {
   color: #fff;
   margin-right: 6px;

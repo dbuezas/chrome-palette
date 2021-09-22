@@ -7,8 +7,10 @@ import { parseInputCommand } from "./parseInputCommand";
 import { UseSuggestionParam } from "./websitesSuggestions";
 export type Command = {
   name: string;
+  icon?: string;
   category?: string;
   shortcut?: string;
+  timeAgo?: string;
   keyword?: string;
   command: Function;
   onHighlighted?: Function;
@@ -38,7 +40,7 @@ function useCommandSuggestions({
         },
       },
       {
-        name: "Show History Page",
+        name: "Open History Page",
         category: "Command",
         shortcut: "⌘ y",
         command: async function () {
@@ -46,7 +48,7 @@ function useCommandSuggestions({
         },
       },
       {
-        name: "Show Downloads",
+        name: "Open Downloads",
         category: "Command",
         shortcut: "⌘⇧ d",
         command: async function () {
@@ -54,14 +56,14 @@ function useCommandSuggestions({
         },
       },
       {
-        name: "Show Extensions",
+        name: "Open Extensions",
         category: "Command",
         command: async function () {
           await browser.tabs.create({ url: "chrome://extensions" });
         },
       },
       {
-        name: "Show Bookmarks",
+        name: "Open Bookmark Manager",
         category: "Command",
         shortcut: "⌘⌥ b",
         command: async function () {
@@ -69,7 +71,15 @@ function useCommandSuggestions({
         },
       },
       {
-        name: "Show Settings",
+        name: "Show/hide Bookmarks Bar",
+        category: "Command",
+        shortcut: "⌘⇧ b",
+        command: async function () {
+          setInputValue("Unsupported. Use [⌘⇧ b] instead.");
+        },
+      },
+      {
+        name: "Open Settings",
         category: "Command",
         shortcut: "⌘ ,",
         command: async function () {
@@ -320,6 +330,20 @@ function useCommandSuggestions({
             index: -1,
           });
           await browser.tabs.update(currentTab.id!, { highlighted: true });
+        },
+      },
+      {
+        name: "Toggle full screen",
+        category: "Command",
+        shortcut: "⌃⌘ f",
+        command: async function () {
+          const currWindow = await browser.windows.getCurrent();
+          const state =
+            currWindow.state === "fullscreen" ? "normal" : "fullscreen";
+          browser.windows.update(currWindow.id!, {
+            state,
+          });
+          window.close();
         },
       },
       {

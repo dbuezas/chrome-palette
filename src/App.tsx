@@ -13,6 +13,7 @@ import { useAudibleTabSuggestions } from "./hooks/audioSuggestions";
 import { useSwitchTabSuggestions } from "./hooks/tabsSuggestions";
 import { useHistorySuggestions } from "./hooks/historySuggestions";
 import { useBookmarkSuggestions } from "./hooks/bookmarkSuggestions";
+import { useBookmarkThisSuggestions } from "./hooks/bookmarkThisSuggestions";
 
 import { sortByUsed, storeLastUsed } from "./last-used";
 import usePaletteInput from "./hooks/usePaletteInput";
@@ -28,6 +29,7 @@ function App() {
     ...useSwitchTabSuggestions("t", input),
     ...useHistorySuggestions("h", input),
     ...useBookmarkSuggestions("b", input),
+    ...useBookmarkThisSuggestions("bt", input),
     ...useTemplatedSuggestions(input),
   ]);
 

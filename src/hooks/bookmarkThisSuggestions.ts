@@ -5,34 +5,47 @@ import { parseInputCommand } from "./parseInputCommand";
 import browser from "webextension-polyfill";
 import { UseSuggestionParam } from "./websitesSuggestions";
 import niceUrl from "./niceUrl";
+import { isDefined } from "./historySuggestions";
 
 const traverse = (
   nodes: browser.Bookmarks.BookmarkTreeNode[],
   breadcrumb = ""
-): (Command & { dateAdded: number })[] => {
-  return nodes.flatMap(({ children, url, title, dateAdded }) => {
-    const path = breadcrumb ? breadcrumb + "/" + title : title;
-    if (children) {
-      return traverse(children, path);
+): Command[] => {
+  return nodes.flatMap(({ id, children, url, title, dateAdded }) => {
+    const path = breadcrumb ? breadcrumb + " / " + title : title;
+    const list: Command[] = [];
+    if (!url && path !== "") {
+      list.push({
+        name: path,
+        icon: "chrome://favicon/",
+        category: "Add Bookmark",
+        timeAgo:
+          dateAdded !== 0
+            ? undefined
+            : formatDistanceToNow(new Date(dateAdded || 0)),
+        command: async function () {
+          const [tab] = await browser.tabs.query({
+            currentWindow: true,
+            active: true,
+          });
+          await browser.bookmarks.create({
+            index: 0,
+            url: tab.url,
+            title: tab.title,
+            parentId: id,
+          });
+          window.close();
+        },
+      });
     }
-    url ||= "";
-    return {
-      name: `${title} > ${breadcrumb}\n${niceUrl(url)}`,
-      icon: "chrome://favicon/" + url,
-      category: "Bookmark",
-      dateAdded: dateAdded || 0,
-      timeAgo: dateAdded
-        ? formatDistanceToNow(new Date(dateAdded || 0))
-        : undefined,
-      command: async function () {
-        await browser.tabs.create({ url });
-      },
-    };
+    if (children) {
+      list.push(...traverse(children, path));
+    }
+    return list;
   });
-  // .sort((a, b) => b.dateAdded - a.dateAdded);
 };
 
-export function useBookmarkSuggestions(
+export function useBookmarkThisSuggestions(
   KEYWORD: string,
   { setInputValue, inputValue }: UseSuggestionParam
 ) {
@@ -54,8 +67,8 @@ export function useBookmarkSuggestions(
   if (didMatch) return [];
   return [
     {
-      name: "Bookmarked Tabs",
-      category: "Search",
+      name: "Bookmark this tab",
+      category: "Add Bookmark",
       command: async function () {
         setInputValue(KEYWORD + ">");
       },

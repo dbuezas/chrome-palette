@@ -1,10 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Command } from "./commandsSuggestions";
-import { formatDistance } from "date-fns";
 import { parseInputCommand } from "./parseInputCommand";
 import browser from "webextension-polyfill";
 import { UseSuggestionParam } from "./websitesSuggestions";
-
+import niceUrl from "./niceUrl";
 export function useSwitchTabSuggestions(
   KEYWORD: string,
   { setInputValue, inputValue }: UseSuggestionParam
@@ -20,10 +19,8 @@ export function useSwitchTabSuggestions(
       const allTabs = await browser.tabs.query({});
       const actions = allTabs.map(({ title, url, id, windowId }) => {
         url ||= "";
-        const niceUrl =
-          url.length <= 80 ? url : url.slice(0, 40) + "..." + url.slice(-37);
         return {
-          name: `${title}\n${niceUrl}`,
+          name: `${title}\n${niceUrl(url)}`,
           icon: "chrome://favicon/" + url,
           category: "Tab",
           command: () => {

@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Command } from "./commandsSuggestions";
-import { formatDistance } from "date-fns";
+import { formatDistanceToNow } from "date-fns";
 import { parseInputCommand } from "./parseInputCommand";
 import browser from "webextension-polyfill";
 import { UseSuggestionParam } from "./websitesSuggestions";
+import niceUrl from "./niceUrl";
 
 export function isDefined<T>(a: T | null): a is T {
   return Boolean(a);
@@ -28,15 +29,11 @@ export function useHistorySuggestions(
       const actions = list
         .map(({ url, title, lastVisitTime }) => {
           if (!url) return null;
-          const niceUrl =
-            url.length <= 80 ? url : url.slice(0, 40) + "..." + url.slice(-37);
           return {
-            name: `${title}\n${niceUrl}`,
+            name: `${title}\n${niceUrl(url)}`,
             category: "History",
             // keyword: url.slice(0, 100),
-            timeAgo: formatDistance(lastVisitTime!, new Date(), {
-              addSuffix: true,
-            }),
+            timeAgo: formatDistanceToNow(lastVisitTime || 0),
             icon: "chrome://favicon/" + url,
             command: async function () {
               await browser.tabs.create({ url });
