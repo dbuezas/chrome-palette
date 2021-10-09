@@ -3,6 +3,7 @@ import WebSocket, { WebSocketServer } from "ws";
 import chokidar from "chokidar";
 import { execSync } from "child_process";
 import esbuild from "esbuild";
+import alias from 'esbuild-plugin-alias';
 
 const date = new Date().toString();
 const isProd = process.env.NODE_ENV === "production";
@@ -10,6 +11,9 @@ const isProd = process.env.NODE_ENV === "production";
 const synchPublic = async () => {
   execSync("cp public/* dist/");
 };
+import { createRequire } from 'module';
+const _require = createRequire(import.meta.url);
+
 const watchOptn = {
   // awaitWriteFinish: {stabilityThreshold:100, pollInterval:50},
   ignoreInitial: true,
@@ -22,6 +26,7 @@ async function build() {
   const result = await esbuild.build({
     entryPoints: ["src/index.tsx"],
     bundle: true,
+    inject: ["src/preact-shim.js"],
     minify: isProd,
     metafile: true,
     sourcemap: isProd ? false : "inline",
@@ -32,6 +37,14 @@ async function build() {
       "process.env.NODE_ENV": `"${process.env.NODE_ENV}"`,
       "process.env.REACT_APP_BUILD_TIME": `"${date}"`,
     },
+    plugins: [
+      alias({
+        "react": _require.resolve("preact/compat"),
+        "react-dom/test-utils": _require.resolve("preact/test-utils"),
+        "react-dom": _require.resolve("preact/compat"),
+        "react/jsx-runtime": _require.resolve("preact/jsx-runtime"),
+      }),
+    ],
   });
   console.timeEnd("build");
 

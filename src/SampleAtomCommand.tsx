@@ -1,4 +1,3 @@
-import React from "react";
 import "./SampleAtomCommand.css";
 
 type Props = {

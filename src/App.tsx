@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useCommandSuggestions, { Command } from "./hooks/commandsSuggestions";
 //@ts-expect-error
 import CommandPalette from "react-command-palette";
@@ -19,10 +19,40 @@ import { sortByUsed, storeLastUsed } from "./last-used";
 import usePaletteInput from "./hooks/usePaletteInput";
 import { parseInputCommand } from "./hooks/parseInputCommand";
 
+import equal from "fast-deep-equal";
+
 function App() {
   const [, forceRender] = useState({});
   const commandPalette = useRef<any>(null);
+  useEffect(() => {
+    // @TODO: fork and PR original library with fix
+    // @TODO: Add option to lib to show an empty list when the search query matches nothing (instead of falling back to the full list)
+    // Command palette LIB HACK
+    // the library ignores the search string when the commands change.
+    // this fixes it.
+    if (!commandPalette.current) return;
+    commandPalette.current.componentDidUpdate = function (prevProps: any) {
+      const { commands, open } = this.props;
+      if (open !== prevProps.open) {
+        if (open) {
+          this.handleOpenModal();
+        } else {
+          this.handleCloseModal();
+        }
+      }
+
+      if (!equal(prevProps.commands, commands)) {
+        const element: HTMLInputElement | undefined =
+          commandPalette.current.commandPaletteInput?.input;
+        const value = element?.value || "";
+        this.fetchData(); // set this.allCommands
+        this.onSuggestionsFetchRequested({ value }); // updates matching suggestions
+      }
+    };
+  }, [commandPalette.current]);
   const input = usePaletteInput(commandPalette);
+
+  // @TODO: find a full memoization strategy to keep commands list constant and avoid double fuzzy searching
   const commands = sortByUsed([
     ...useCommandSuggestions(input),
     ...useAudibleTabSuggestions(input),
@@ -33,15 +63,6 @@ function App() {
     ...useTemplatedSuggestions(input),
   ]);
 
-  useEffect(() => {
-    // blur + focus hack to let the lib know that it should recompute the matches
-    // even after changing only the commands
-    // When the commands reference changes,
-    // the CommandPalette component does not fuzzyfilter the suggestions and shows all of them instead.
-    // this fixes that
-    input.element?.blur();
-    input.element?.focus();
-  });
   return (
     <CommandPalette
       ref={commandPalette}
