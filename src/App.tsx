@@ -53,6 +53,7 @@ function App() {
   const input = usePaletteInput(commandPalette);
 
   // @TODO: find a full memoization strategy to keep commands list constant and avoid double fuzzy searching
+  console.log(input.element);
   const commands = sortByUsed([
     ...useCommandSuggestions(input),
     ...useAudibleTabSuggestions(input),

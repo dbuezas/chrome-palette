@@ -1,5 +1,7 @@
 import { parseInputCommand } from "./parseInputCommand";
 import browser from "webextension-polyfill";
+import { useMemo } from "react";
+import useShortcut from "./useShortcut";
 
 export type UseSuggestionParam = {
   setInputValue: (a: string) => void;
@@ -38,6 +40,21 @@ export function useTemplatedSuggestions({
   setInputValue,
   inputValue,
 }: UseSuggestionParam) {
+  const searchTemplates = templates.map((template) => {
+    const shortcut = useShortcut(template.keyword, {
+      setInputValue,
+      inputValue,
+    });
+    return {
+      name: `Search ${template.name}`,
+      category: "Search",
+      command: async function () {
+        setInputValue(template.keyword + ">");
+      },
+      keyword: template.keyword + ">",
+      shortcut,
+    };
+  });
   const { didMatch, keyword, query } = parseInputCommand(inputValue);
   if (didMatch) {
     for (const template of templates) {
@@ -56,14 +73,7 @@ export function useTemplatedSuggestions({
       }
     }
   } else {
-    return templates.map((template) => ({
-      name: `Search ${template.name}`,
-      category: "Search",
-      command: async function () {
-        setInputValue(template.keyword + ">");
-      },
-      keyword: template.keyword + ">",
-    }));
+    return searchTemplates;
   }
 
   return [];

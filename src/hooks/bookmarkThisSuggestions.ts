@@ -6,6 +6,7 @@ import browser from "webextension-polyfill";
 import { UseSuggestionParam } from "./websitesSuggestions";
 import niceUrl from "./niceUrl";
 import { isDefined } from "./historySuggestions";
+import useShortcut from "./useShortcut";
 
 const traverse = (
   nodes: browser.Bookmarks.BookmarkTreeNode[],
@@ -49,6 +50,7 @@ export function useBookmarkThisSuggestions(
   KEYWORD: string,
   { setInputValue, inputValue }: UseSuggestionParam
 ) {
+  const shortcut = useShortcut(KEYWORD, { setInputValue, inputValue });
   const [commands, setCommands] = useState<Command[]>([]);
   const { didMatch, keyword } = parseInputCommand(inputValue);
   const myMatch = keyword === KEYWORD;

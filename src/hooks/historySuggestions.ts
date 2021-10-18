@@ -5,6 +5,7 @@ import { parseInputCommand } from "./parseInputCommand";
 import browser from "webextension-polyfill";
 import { UseSuggestionParam } from "./websitesSuggestions";
 import niceUrl from "./niceUrl";
+import useShortcut from "./useShortcut";
 
 export function isDefined<T>(a: T | null): a is T {
   return Boolean(a);
@@ -13,6 +14,8 @@ export function useHistorySuggestions(
   KEYWORD: string,
   { setInputValue, inputValue }: UseSuggestionParam
 ) {
+  const shortcut = useShortcut(KEYWORD, { setInputValue, inputValue });
+
   const [commands, setCommands] = useState<Command[]>([]);
   const { didMatch, keyword } = parseInputCommand(inputValue);
   const myMatch = keyword === KEYWORD;
@@ -56,6 +59,7 @@ export function useHistorySuggestions(
         setInputValue(KEYWORD + ">");
       },
       keyword: KEYWORD + ">",
+      shortcut,
     },
   ];
 }

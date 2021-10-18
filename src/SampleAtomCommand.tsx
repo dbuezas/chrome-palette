@@ -30,7 +30,9 @@ export default function SampleAtomCommand({
           }}
         />
       }
-      <span className="atom-shortcut">{shortcut}</span>
+      <span className="atom-shortcut">
+        {shortcut === "unset" ? "" : shortcut}
+      </span>
       <span className="atom-keyword">{keyword}</span>
       <span className="atom-timeAgo">{timeAgo}</span>
     </div>

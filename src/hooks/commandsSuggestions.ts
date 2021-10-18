@@ -1,6 +1,6 @@
 // adapted from https://github.com/ssundarraj/commander/blob/master/src/js/actions.js
 
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 import browser from "webextension-polyfill";
 import { resetHistory } from "../last-used";
 import { parseInputCommand } from "./parseInputCommand";
@@ -20,8 +20,7 @@ function useCommandSuggestions({
   setInputValue,
   inputValue,
 }: UseSuggestionParam) {
-  const [commands, setCommands] = useState<Command[]>([]);
-  useEffect(() => {
+  const commands: Command[] = useMemo(() => {
     const commands: Command[] = [
       {
         name: "New Tab",
@@ -45,6 +44,13 @@ function useCommandSuggestions({
         shortcut: "⌘ y",
         command: async function () {
           await browser.tabs.create({ url: "chrome://history" });
+        },
+      },
+      {
+        name: "Open Passwords Page",
+        category: "Command",
+        command: async function () {
+          await browser.tabs.create({ url: "chrome://settings/passwords" });
         },
       },
       {
@@ -367,7 +373,7 @@ function useCommandSuggestions({
         },
       });
     }
-    setCommands(commands);
+    return commands;
   }, [setInputValue]);
   const { didMatch } = parseInputCommand(inputValue);
   if (didMatch) return [];

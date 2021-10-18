@@ -12,7 +12,7 @@ function useShortcut() {
       if (mainCommand?.shortcut) setShortcut(mainCommand.shortcut);
     });
   }, []);
-  return shortcut;
+  return shortcut === "unset" ? "set shortcut" : shortcut;
 }
 
 export default function Header() {

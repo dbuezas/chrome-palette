@@ -1,6 +1,6 @@
 {
   "name": "Chrome Palette",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "manifest_version": 2,
   "description": "Chrome Palette, a command palette for chrome",
   "icons": {
@@ -29,6 +29,30 @@
         "chromeos": "Ctrl+Shift+P",
         "linux": "Ctrl+Shift+P"
       }
+    },
+    "gd": {
+      "description": "Google Drive"
+    },
+    "y": {
+      "description": "Youtube"
+    },
+    "g": {
+      "description": "Google"
+    },
+    "w": {
+      "description": "Wikipedia"
+    },
+    "t": {
+      "description": "Search Tabs"
+    },
+    "h": {
+      "description": "Search History"
+    },
+    "b": {
+      "description": "Search Bookmarks"
+    },
+    "bt": {
+      "description": "Bookmark this page"
     }
   },
   "web_accessible_resources": ["date.txt"]
