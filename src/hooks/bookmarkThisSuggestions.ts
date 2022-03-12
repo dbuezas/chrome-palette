@@ -1,11 +1,9 @@
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { Command } from "./commandsSuggestions";
 import { formatDistanceToNow } from "date-fns";
 import { parseInputCommand } from "./parseInputCommand";
 import browser from "webextension-polyfill";
 import { UseSuggestionParam } from "./websitesSuggestions";
-import niceUrl from "./niceUrl";
-import { isDefined } from "./historySuggestions";
 import useShortcut from "./useShortcut";
 
 const traverse = (
@@ -50,7 +48,7 @@ export function useBookmarkThisSuggestions(
   KEYWORD: string,
   { setInputValue, inputValue }: UseSuggestionParam
 ) {
-  const shortcut = useShortcut(KEYWORD, { setInputValue, inputValue });
+  const shortcut = useShortcut(KEYWORD, { setInputValue });
   const [commands, setCommands] = useState<Command[]>([]);
   const { didMatch, keyword } = parseInputCommand(inputValue);
   const myMatch = keyword === KEYWORD;
@@ -64,17 +62,20 @@ export function useBookmarkThisSuggestions(
     };
     fetch();
   }
-
+  const bookmarkThis = useMemo(
+    () => [
+      {
+        name: "Bookmark this tab",
+        category: "Add Bookmark",
+        command: async function () {
+          setInputValue(KEYWORD + ">");
+        },
+        keyword: KEYWORD + ">",
+      },
+    ],
+    []
+  );
   if (myMatch) return commands;
   if (didMatch) return [];
-  return [
-    {
-      name: "Bookmark this tab",
-      category: "Add Bookmark",
-      command: async function () {
-        setInputValue(KEYWORD + ">");
-      },
-      keyword: KEYWORD + ">",
-    },
-  ];
+  return bookmarkThis
 }

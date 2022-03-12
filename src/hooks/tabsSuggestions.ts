@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { Command } from "./commandsSuggestions";
 import { parseInputCommand } from "./parseInputCommand";
 import browser from "webextension-polyfill";
@@ -10,7 +10,7 @@ export function useSwitchTabSuggestions(
   KEYWORD: string,
   { setInputValue, inputValue }: UseSuggestionParam
 ) {
-  const shortcut = useShortcut(KEYWORD, { setInputValue, inputValue });
+  const shortcut = useShortcut(KEYWORD, { setInputValue });
   const [commands, setCommands] = useState<Command[]>([]);
   const { didMatch, keyword } = parseInputCommand(inputValue);
   const myMatch = keyword === KEYWORD;
@@ -37,17 +37,21 @@ export function useSwitchTabSuggestions(
     };
     fetch();
   }
+  const searchTabs = useMemo(
+    () => [
+      {
+        name: "Search Tabs",
+        category: "Search",
+        command: async function () {
+          setInputValue(KEYWORD + ">");
+        },
+        keyword: KEYWORD + ">",
+        shortcut,
+      },
+    ],
+    []
+  );
   if (myMatch) return commands;
   if (didMatch) return [];
-  return [
-    {
-      name: "Search Tabs",
-      category: "Search",
-      command: async function () {
-        setInputValue(KEYWORD + ">");
-      },
-      keyword: KEYWORD + ">",
-      shortcut,
-    },
-  ];
+  return searchTabs;
 }

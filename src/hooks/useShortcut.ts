@@ -5,7 +5,7 @@ import { useHotkeys } from "react-hotkeys-hook";
 
 export default function useShortcut(
   KEYWORD: string,
-  { setInputValue }: UseSuggestionParam
+  { setInputValue }: { setInputValue: UseSuggestionParam["setInputValue"] }
 ) {
   const [shortcut, setShortcut] = useState("unset");
   useEffect(() => {

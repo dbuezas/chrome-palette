@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { Command } from "./commandsSuggestions";
 import { formatDistanceToNow } from "date-fns";
 import { parseInputCommand } from "./parseInputCommand";
@@ -37,7 +37,7 @@ export function useBookmarkSuggestions(
   KEYWORD: string,
   { setInputValue, inputValue }: UseSuggestionParam
 ) {
-  const shortcut = useShortcut(KEYWORD, { setInputValue, inputValue });
+  const shortcut = useShortcut(KEYWORD, { setInputValue });
   const [commands, setCommands] = useState<Command[]>([]);
   const { didMatch, keyword } = parseInputCommand(inputValue);
   const myMatch = keyword === KEYWORD;
@@ -51,17 +51,20 @@ export function useBookmarkSuggestions(
     };
     fetch();
   }
-
+  const bookmarkSuggestions = useMemo(
+    () => [
+      {
+        name: "Bookmarked Tabs",
+        category: "Search",
+        command: async function () {
+          setInputValue(KEYWORD + ">");
+        },
+        keyword: KEYWORD + ">",
+      },
+    ],
+    []
+  );
   if (myMatch) return commands;
   if (didMatch) return [];
-  return [
-    {
-      name: "Bookmarked Tabs",
-      category: "Search",
-      command: async function () {
-        setInputValue(KEYWORD + ">");
-      },
-      keyword: KEYWORD + ">",
-    },
-  ];
+  return bookmarkSuggestions;
 }

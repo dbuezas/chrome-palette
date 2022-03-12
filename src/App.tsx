@@ -19,42 +19,12 @@ import { sortByUsed, storeLastUsed } from "./last-used";
 import usePaletteInput from "./hooks/usePaletteInput";
 import { parseInputCommand } from "./hooks/parseInputCommand";
 
-import equal from "fast-deep-equal";
-
 function App() {
   const [, forceRender] = useState({});
   const commandPalette = useRef<any>(null);
-  useEffect(() => {
-    // @TODO: fork and PR original library with fix
-    // @TODO: Add option to lib to show an empty list when the search query matches nothing (instead of falling back to the full list)
-    // Command palette LIB HACK
-    // the library ignores the search string when the commands change.
-    // this fixes it.
-    if (!commandPalette.current) return;
-    commandPalette.current.componentDidUpdate = function (prevProps: any) {
-      const { commands, open } = this.props;
-      if (open !== prevProps.open) {
-        if (open) {
-          this.handleOpenModal();
-        } else {
-          this.handleCloseModal();
-        }
-      }
 
-      if (!equal(prevProps.commands, commands)) {
-        const element: HTMLInputElement | undefined =
-          commandPalette.current.commandPaletteInput?.input;
-        const value = element?.value || "";
-        this.fetchData(); // set this.allCommands
-        this.onSuggestionsFetchRequested({ value }); // updates matching suggestions
-      }
-    };
-  }, [commandPalette.current]);
   const input = usePaletteInput(commandPalette);
-
-  // @TODO: find a full memoization strategy to keep commands list constant and avoid double fuzzy searching
-  console.log(input.element);
-  const commands = sortByUsed([
+  let commands = sortByUsed([
     ...useCommandSuggestions(input),
     ...useAudibleTabSuggestions(input),
     ...useSwitchTabSuggestions("t", input),
@@ -63,6 +33,17 @@ function App() {
     ...useBookmarkThisSuggestions("bt", input),
     ...useTemplatedSuggestions(input),
   ]);
+
+  const lastCommands = useRef<Command[]>([]);
+  const areEqual =
+    commands.length === lastCommands.current.length &&
+    commands.every((cmd, i) => cmd === lastCommands.current[i]);
+  if (areEqual) {
+    commands = lastCommands.current;
+  } else {
+    lastCommands.current = commands;
+    console.log("Commands will rerender and create double search")
+  }
 
   return (
     <CommandPalette
@@ -104,6 +85,7 @@ function App() {
       placeholder="Search for a command"
       renderCommand={SampleAtomCommand}
       showSpinnerOnSelect={false}
+      showAllCommandsWhenNoneMatches={false}
     />
   );
 }
