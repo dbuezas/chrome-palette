@@ -1,6 +1,6 @@
 {
   "name": "chrome-palette",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "private": false,
   "author": "david.buezas@gmail.com",
   "dependencies": {

@@ -1,6 +1,6 @@
 {
   "name": "Chrome Palette",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "manifest_version": 2,
   "description": "Chrome Palette, a command palette for chrome",
   "icons": {
