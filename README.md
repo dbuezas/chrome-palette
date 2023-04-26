@@ -1,3 +1,4 @@
+## Get it from the Chrome Web Store with [this link](https://chrome.google.com/webstore/detail/chrome-palette/hjkpneggcnclhpkddehdhlkeljclcnbo)
 # Chrome-palette
 
 A SublimeText/Atom/Vscode style command palette for chrome!
