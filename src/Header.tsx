@@ -7,7 +7,7 @@ function useShortcut() {
   useEffect(() => {
     browser?.commands.getAll().then((commands) => {
       const mainCommand = commands.find(
-        ({ name }) => name === "_execute_browser_action"
+        ({ name }) => name === "_execute_action"
       );
       if (mainCommand?.shortcut) setShortcut(mainCommand.shortcut);
     });

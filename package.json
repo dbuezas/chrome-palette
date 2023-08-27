@@ -10,6 +10,7 @@
     "date-fns": "^2.23.0",
     "esbuild": "^0.13.4",
     "preact": "^10.5.14",
+    "preact-render-to-string": "^6.2.1",
     "react": "^17.0.2",
     "react-command-palette": "github:dbuezas/react-command-palette#npm/push-dist-so-my-project-can-fetch-from-git",
     "react-dom": "^17.0.2",
@@ -20,7 +21,7 @@
     "ws": "^8.2.2"
   },
   "scripts": {
-    "start": "node script/build.mjs",
+    "start": "NODE_ENV=development node script/build.mjs",
     "check-types": "tsc --noEmit",
     "build": "NODE_ENV=production node script/build.mjs",
     "upgrade": "npx npm-check -u"

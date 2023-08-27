@@ -42,9 +42,8 @@ function App() {
     commands = lastCommands.current;
   } else {
     lastCommands.current = commands;
-    console.log("Commands will rerender and create double search")
+    console.log("Commands will rerender and create double search");
   }
-
   return (
     <CommandPalette
       ref={commandPalette}

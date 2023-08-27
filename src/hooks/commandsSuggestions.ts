@@ -106,6 +106,24 @@ function useCommandSuggestions({
         },
       },
       {
+        name: "Terminate Current Tab",
+        category: "Command",
+        command: async function () {
+          const windowId = chrome.windows.WINDOW_ID_CURRENT;
+          console.log(browser);
+          const [currentTab] = await browser.tabs.query({
+            active: true,
+            windowId,
+          });
+          debugger;
+          const processId = await chrome.processes.getProcessIdForTab(
+            currentTab.id!
+          );
+
+          await chrome.processes.terminate(processId);
+        },
+      },
+      {
         name: "Reload Tab",
         category: "Command",
         shortcut: "⌘ r",
