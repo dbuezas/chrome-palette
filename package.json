@@ -1,35 +1,65 @@
 {
   "name": "chrome-palette",
-  "version": "1.2.3",
-  "private": false,
-  "author": "david.buezas@gmail.com",
-  "dependencies": {
-    "@types/node": "^16.10.3",
-    "@types/react": "^17.0.20",
-    "@types/react-dom": "^17.0.9",
-    "date-fns": "^2.23.0",
-    "esbuild": "^0.13.4",
-    "preact": "^10.5.14",
-    "preact-render-to-string": "^6.2.1",
-    "react": "^17.0.2",
-    "react-command-palette": "github:dbuezas/react-command-palette#npm/push-dist-so-my-project-can-fetch-from-git",
-    "react-dom": "^17.0.2",
-    "react-hotkeys-hook": "^3.4.3",
-    "typescript": "^4.4.2",
-    "web-vitals": "^2.1.1",
-    "webextension-polyfill": "^0.8.0",
-    "ws": "^8.2.2"
+  "displayName": "Chrome Palette",
+  "version": "2.0.0",
+  "description": "Command Palette for Chrome",
+  "license": "MIT",
+  "packageManager": "pnpm@7.30.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dbuezas/solid-chrome-palette.git"
+  },
+  "engines": {
+    "pnpm": ">=7",
+    "node": ">=20"
   },
   "scripts": {
-    "start": "NODE_ENV=development node script/build.mjs",
-    "check-types": "tsc --noEmit",
-    "build": "NODE_ENV=production node script/build.mjs",
-    "upgrade": "npx npm-check -u"
+    "serve": "vite dev --open 'http://127.0.0.1:5173/src/pages/popup/index.html'",
+    "serve:prod": "npm run start:prod & npx serve dist & npx --yes open-cli http://localhost:3000/src/pages/popup/ -- 'google chrome' & wait",
+    "start": "vite build --watch --mode development --minify false",
+    "start:prod": "vite build --watch",
+    "build": "vite build && zip -r chrome-palette.zip dist/",
+    "lint": "eslint . --fix -c .eslintrc --ext js,ts --ignore-pattern='!.*'",
+    "dev:nodemon": "nodemon",
+    "analyse-bundle": "npx vite-bundle-visualizer",
+    "upgrade-deps": "npx npm-upgrade",
+    "test": "jest"
+  },
+  "type": "module",
+  "dependencies": {
+    "fuse.js": "^6.6.2",
+    "fuzzysort": "^2.0.4",
+    "solid-infinite-scroll": "^1.0.1",
+    "solid-js": "^1.7.11",
+    "tinykeys": "^2.1.0",
+    "twas": "^2.1.3"
   },
   "devDependencies": {
-    "@types/webextension-polyfill": "^0.8.0",
-    "@types/ws": "^8.2.0",
-    "esbuild-plugin-alias": "^0.2.0",
-    "npm-watch": "^0.11.0"
+    "@crxjs/vite-plugin": "2.0.0-beta.7",
+    "@trivago/prettier-plugin-sort-imports": "^4.2.0",
+    "@types/chrome": "0.0.243",
+    "@types/node": "20.5.1",
+    "@typescript-eslint/eslint-plugin": "6.4.0",
+    "@typescript-eslint/parser": "6.4.0",
+    "autoprefixer": "^10.4.15",
+    "babel-preset-solid": "^1.7.7",
+    "eslint": "8.47.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-import": "^2.28.1",
+    "eslint-plugin-jsx-a11y": "6.7.1",
+    "eslint-plugin-prettier": "5.0.0",
+    "eslint-plugin-solid": "^0.13.0",
+    "fs-extra": "11.1.1",
+    "nodemon": "3.0.1",
+    "postcss": "^8.4.28",
+    "prettier": "^3.0.2",
+    "prettier-plugin-css-order": "^2.0.0",
+    "sass": "1.66.1",
+    "solid-devtools": "^0.27.7",
+    "ts-loader": "9.4.4",
+    "ts-node": "10.9.1",
+    "typescript": "5.1.6",
+    "vite": "4.4.9",
+    "vite-plugin-solid": "^2.7.0"
   }
 }

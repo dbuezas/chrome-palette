@@ -1,0 +1,15 @@
+{
+  "singleQuote": false,
+  "trailingComma": "es5",
+  "requirePragma": false,
+  "arrowParens": "always",
+  "plugins": [
+    "@trivago/prettier-plugin-sort-imports",
+    "prettier-plugin-css-order"
+  ],
+
+  "importOrder": ["[.]s?css$", "<THIRD_PARTY_MODULES>", "^~/(.*)$", "^[./]"],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true,
+  "cssDeclarationSorterOrder": "concentric-css"
+}

@@ -1,7 +1,15 @@
-## Get it from the Chrome Web Store with [this link](https://chrome.google.com/webstore/detail/chrome-palette/hjkpneggcnclhpkddehdhlkeljclcnbo)
-# Chrome-palette
+<div align="center">
+<img width="128" src="/src/assets/img/logo.svg" alt="logo"/>
+<h1> Command Palette for Chrome<br/>Fast, no server, no ads, no telemetry.</h1>
 
-A SublimeText/Atom/Vscode style command palette for chrome!
+![](https://img.shields.io/badge/Typescript-3178C6?style=flat-square&logo=typescript&logoColor=white)
+![](https://badges.aleen42.com/src/vitejs.svg)
+
+<!-- ![GitHub action badge](https://github.com/fuyutarow/solid-chrome-extension-template/actions/workflows/build.yml/badge.svg) -->
+
+<!-- > This project is listed in the [Awesome Vite](https://github.com/vitejs/awesome-vite) -->
+
+</div>
 
 ## Installation
 
@@ -9,90 +17,97 @@ A SublimeText/Atom/Vscode style command palette for chrome!
 
 Or you can unzip [chrome-palette.zip](https://github.com/dbuezas/chrome-palette/raw/master/chrome-palette.zip) and load it unpacked from [chrome://extensions](chrome://extensions)
 
-![alt text](./screenshots/marquee.jpg)
+> The focus is performance, minimal size and ease of use.
 
-## Features
+## Features <a name="features"></a>
 
-- [x] Commands sorted by usage
-- [x] Fuzzy search of commands
-- [x] Search sub commands (open tabs, bookmarks, history, etc)
+- Commands sorted by usage
+- Fuzzy search of commands
+- Search sub commands (open tabs, bookmarks, history, etc)
+- Dark mode
+- See standard shortcuts
 
 ## Command list
 
-- [x] New Tab
-- [x] New Window
-- [x] Open History Page
-- [x] Open Downloads
-- [x] Open Extensions
-- [x] Open Bookmarks
-- [x] Add this tab to Bookmarks
-- [x] Open Settings
-- [x] Close Current Tab
-- [x] Reload Tab
-- [x] Reload All Tabs
-- [x] Clear Cache and Reload Tab
-- [x] Toggle Pin
-- [x] Duplicate Tab
-- [x] New Incognito Window
-- [x] Close Other Tabs
-- [x] Close Tabs To Right
-- [x] Close Tabs To Left
-- [x] Mute/Unmute Tab
-- [x] Move Tab To Start
-- [x] Move Tab To End
-- [x] Move Tab Left
-- [x] Move Tab Right
-- [x] Reopen/Unclose Tab
-- [x] Deattach Tab (Move to New Window)
-- [x] Reattach Tab (Move Tab to Previous Window)
-- [x] Reset command history
-- [x] Toggle Full screen mode
-- [x] Search Tabs
-- [x] Search History
-- [x] Search Google Drive
-- [x] Search Youtube
-- [x] Search Google
-- [x] Search Wikipedia
+- New Tab
+- New Window
+- Open History Page
+- Open Passwords Page
+- Open Downloads
+- Open Extensions
+- Open Extension Shortcuts
+- Open Bookmark Manager
+- Show/hide Bookmarks Bar
+- Open Settings
+- Close Current Tab
+- Terminate Current Tab
+- Reload Tab
+- Reload All Tabs
+- Clear Cache and Reload Tab
+- Toggle Pin
+- Duplicate Tab
+- New Incognito Window
+- Close Other Tabs
+- Close Tabs To Right
+- Close Tabs To Left
+- Mute/Unmute Tab
+- Move Tab To Start
+- Move Tab To End
+- Move Tab Left
+- Move Tab Right
+- Reopen/Unclose Tab
+- Deattach Tab (Move to New Window)
+- Reattach Tab (Move Tab to Previous Window)
+- Toggle full screen
+- Clear browsing history, cookies and cache
+- Open Chrome SignIn internals
+- Open Chrome Apps
+- Configure Chrome internal flags
+- Configure Third-party Cookies
+- Configure Ad privacy
+- Configure Sync and Google Services
+- Configure Chrome Profile
+- Import Bookmarks & Settings
+- Configure Addresses
+- Configure Autofill & Passwords
+- Configure Payment Methods
+- Configure Site Settings & Permissions
+- Configure Security
+- Configure Privacy and security
+- Configure Search engine
+- Configure Default browser
+- Configure on Start-up
+- Configure Languages
+- Configure Accessibility
+- Configure System & Proxy
+- Reset chrome settings
+- About chrome
+- Print page
+- Reset command history
 
 ## Development
+
+- Made using SolidJS
 
 ```bash
 npm install
 npm start
 ```
 
+> PRs welcome!
+
 ## Full Manual testing
 
 Import the `dist` folder as an unpacked extension in chrome. This folder is rebuilt on changes when using `npm start`
 
+## History
+
+| Version       | View Framework | Bundler | Manifest | Command Palette lib          | Total size | Compressed | Startup time |
+| ------------- | -------------- | ------- | -------- | ---------------------------- | ---------- | ---------- | ------------ |
+| v2.0.0 (2023) | SolidJS        | Vite    | V3       | Self Made                    | 79kb       | 38Kb       | 99ms         |
+| v1.2.1 (2022) | Preact         | ESBuild | V2       | Forked react-command-palette | 180kb      | 60Kb       | 220ms        |
+| v1.0.0 (2021) | React          | Webpack | V2       | react-command-palette        | 287kb      | 93Kb       | 350ms        |
+
 # Previous art
 
 - Commander: https://github.com/ssundarraj/commander
-
-# License
-
-MIT License
-
-Copyright (c) 2022 David Buezas
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
-# PRs
-
-PRs and feature requests are very welcome. Please don't put your own fork in the chrome store though :) 

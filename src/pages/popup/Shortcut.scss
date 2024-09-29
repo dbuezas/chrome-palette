@@ -1,0 +1,29 @@
+.Shortcut {
+  align-self: center;
+  font-size: 12px;
+
+  &.clickable {
+    cursor: pointer;
+    &::after {
+      vertical-align: sub;
+      margin-left: 10px;
+      content: "⚙";
+      font-size: 25px;
+      line-height: 0;
+    }
+  }
+  > kbd {
+    display: inline-block;
+    margin-left: 5px;
+    border: 1px solid var(--shortcut-border-color);
+    border-radius: 4px;
+    background-color: var(--shortcut-background-color);
+    padding: 2px;
+    width: 12px;
+    color: var(--shortcut-text-color);
+    font-family: system-ui;
+    text-align: center;
+    text-decoration: inherit;
+    text-transform: uppercase;
+  }
+}

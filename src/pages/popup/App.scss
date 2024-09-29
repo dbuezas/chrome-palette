@@ -1,0 +1,26 @@
+.App {
+  padding: 0;
+  .input_wrap {
+    display: flex;
+    border-bottom: 0.5px solid var(--input-border-color);
+    padding: 0 20px;
+    input {
+      flex-grow: 1;
+      appearance: none;
+      box-sizing: border-box;
+      outline: 0;
+      border: none;
+      background-color: var(--app-background-color);
+      padding: 20px 0;
+      color: var(--text-color);
+      font-size: 20px;
+      font-family: inherit;
+    }
+  }
+  .list {
+    margin: 0;
+    padding: 0;
+    height: 300px;
+    overflow: auto;
+  }
+}

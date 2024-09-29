@@ -1,0 +1,14 @@
+.Keyword {
+  display: inline-block;
+  align-self: center;
+  margin-left: 5px;
+  border: 1px solid var(--input-border-color);
+  border-radius: 4px;
+  padding: 3px 5px;
+  color: 1px solid var(--input-border-color);
+  font-size: 12px;
+  font-family: system-ui;
+  text-align: center;
+  text-decoration: inherit;
+  text-transform: lowercase;
+}

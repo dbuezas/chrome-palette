@@ -1,0 +1,53 @@
+body[theme="Light"] {
+  --app-background-color: #fefefe;
+  --entry-hover-background-color: #ebebeb88;
+  --entry-matched-text: #0072dd;
+  --entry-selected-background-color: #ebebeb;
+  --entry-selected-border-color: #d6d6d6;
+  --entry-selected-text-color: #222;
+  --input-border-color: #adadad;
+  --shortcut-background-color: #cde6ff;
+  --shortcut-border-color: #9bb7e2;
+  --shortcut-text-color: #455670;
+  --text-color: #222;
+  --thumbBG: #a7a7a7;
+}
+
+body[theme="Dark"] {
+  --app-background-color: #323232;
+  --entry-hover-background-color: #7d7d7d44;
+  --entry-matched-text: #54a9f8;
+  --entry-selected-background-color: #5d5c5c;
+  --entry-selected-border-color: #6f6f6f;
+  --entry-selected-text-color: #ffffff;
+  --input-border-color: #adadad;
+  --shortcut-background-color: #4b72ae;
+  --shortcut-border-color: #6892d3;
+  --shortcut-text-color: #eee;
+  --text-color: #ccc;
+  --thumbBG: #a7a7a7;
+}
+.list::-webkit-scrollbar {
+  width: 8px;
+}
+.list {
+  scrollbar-color: var(--thumbBG);
+}
+.list::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  background-color: var(--thumbBG);
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  position: relative;
+  margin: 0;
+  background-color: var(--app-background-color);
+  width: 605px;
+  height: 364px;
+  color: var(--text-color);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+}
