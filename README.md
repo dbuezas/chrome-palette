@@ -104,7 +104,7 @@ Import the `dist` folder as an unpacked extension in chrome. This folder is rebu
 
 | Version       | View Framework | Bundler | Manifest | Command Palette lib          | Total size | Compressed | Startup time |
 | ------------- | -------------- | ------- | -------- | ---------------------------- | ---------- | ---------- | ------------ |
-| v2.0.0 (2023) | SolidJS        | Vite    | V3       | Self Made                    | 79kb       | 38Kb       | 99ms         |
+| v2.0.0 (2024) | SolidJS        | Vite    | V3       | Self Made                    | 79kb       | 38Kb       | 99ms         |
 | v1.2.1 (2022) | Preact         | ESBuild | V2       | Forked react-command-palette | 180kb      | 60Kb       | 220ms        |
 | v1.0.0 (2021) | React          | Webpack | V2       | react-command-palette        | 287kb      | 93Kb       | 350ms        |
 
