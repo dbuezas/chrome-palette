@@ -11,7 +11,8 @@ import Shortcut from "./Shortcut";
 import { Command } from "./commands/general";
 import { parsedInput } from "./util/signals";
 
-function faviconURL(u: string) {
+export function faviconURL(u?: string) {
+  if (!u) return u;
   const url = new URL(chrome.runtime.getURL("/_favicon/"));
   url.searchParams.set("pageUrl", u);
   url.searchParams.set("size", "32");
@@ -56,14 +57,14 @@ export default function Entry(props: {
         });
       }}
     >
-      <Show when={props.command.icon}>
+      <Show when={props.command.icon || faviconURL(props.command.url)}>
         {(icon) => (
           <img
             classList={{
               img: true,
               img_big: !!(subtitle() || url()),
             }}
-            src={faviconURL(icon())}
+            src={icon()}
             alt=""
             loading="lazy"
           />
@@ -80,6 +81,8 @@ export default function Entry(props: {
           <Show when={parsedInput().query} fallback={props.command.subtitle}>
             {subtitle()}
           </Show>
+        </div>
+        <div class="subtitle">
           <Show when={parsedInput().query} fallback={props.command.url}>
             {url()}
           </Show>

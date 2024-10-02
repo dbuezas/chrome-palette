@@ -1,5 +1,6 @@
 import { createLazyResource, matchCommand, setInput } from "~/util/signals";
 
+import { faviconURL } from "../Entry";
 import { Command } from "./general";
 
 const KEYWORD = "h";
@@ -32,7 +33,7 @@ const commands = createLazyResource<Command[]>([], async (setVal) => {
           return {
             title: title || "Untitled",
             lastVisitTime,
-            icon: url,
+            icon: faviconURL(url),
             url,
           };
         })
@@ -50,7 +51,7 @@ const commands = createLazyResource<Command[]>([], async (setVal) => {
 const base: Command[] = [
   {
     title: "Search History",
-    icon: "chrome://history/",
+    icon: faviconURL("chrome://history/"),
     command: async function () {
       setInput(KEYWORD + ">");
     },

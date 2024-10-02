@@ -1,6 +1,7 @@
 import niceUrl from "~/util/nice-url";
 import { createLazyResource, matchCommand, setInput } from "~/util/signals";
 
+import { faviconURL } from "../Entry";
 import { Command } from "./general";
 
 const KEYWORD = "t";
@@ -12,7 +13,7 @@ const commands = createLazyResource<Command[]>([], async () => {
     return {
       title: title || "Untitled",
       subtitle: niceUrl(url),
-      icon: url,
+      icon: faviconURL(url),
       command: () => {
         chrome.tabs.update(id!, { highlighted: true });
         chrome.windows.update(windowId!, { focused: true });
@@ -29,7 +30,7 @@ const base: Command[] = [
       setInput(KEYWORD + ">");
     },
     keyword: KEYWORD + ">",
-    icon: "about:blank",
+    icon: faviconURL("about:blank"),
   },
 ];
 

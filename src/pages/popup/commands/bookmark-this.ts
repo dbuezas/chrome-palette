@@ -1,5 +1,6 @@
 import { createLazyResource, matchCommand, setInput } from "~/util/signals";
 
+import { faviconURL } from "../Entry";
 import { Command } from "./general";
 
 const KEYWORD = "bt";
@@ -14,7 +15,7 @@ const traverse = (
     if (!url && path !== "") {
       list.push({
         title: path,
-        icon: "chrome://favicon/",
+        icon: faviconURL("chrome://favicon/"),
         lastVisitTime: dateAdded,
         command: async function () {
           const [tab] = await chrome.tabs.query({

@@ -1,5 +1,6 @@
 import { matchCommand, parsedInput, setInput } from "~/util/signals";
 
+import { faviconURL } from "../Entry";
 import { Command } from "./general";
 
 type Template = {
@@ -37,7 +38,7 @@ const templates: Template[] = [
 
 const base: Command[] = templates.map((template) => ({
   title: `Search ${template.title}`,
-  icon: template.icon,
+  icon: faviconURL(template.icon),
   command: async function () {
     setInput(template.keyword + ">");
   },

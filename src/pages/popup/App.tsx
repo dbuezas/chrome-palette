@@ -16,6 +16,7 @@ import Shortcut from "./Shortcut";
 import audibleTabSuggestions from "./commands/audio";
 import bookmarkThisSuggestions from "./commands/bookmark-this";
 import bookmarkSuggestions from "./commands/bookmarks";
+import extenionsSuggestions from "./commands/extensions";
 import generalSuggestions, { Command } from "./commands/general";
 import historySuggestions from "./commands/history";
 import switchTabSuggestions from "./commands/tabs";
@@ -42,6 +43,7 @@ const allCommands = createMemo(() => {
     ...switchTabSuggestions(),
     ...historySuggestions(),
     ...bookmarkSuggestions(),
+    ...extenionsSuggestions(),
     ...websitesSuggestions(),
     ...themeSuggestions(),
   ];

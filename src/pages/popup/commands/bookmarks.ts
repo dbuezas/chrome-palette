@@ -1,5 +1,6 @@
 import { createLazyResource, matchCommand, setInput } from "~/util/signals";
 
+import { faviconURL } from "../Entry";
 import { Command } from "./general";
 
 const KEYWORD = "b";
@@ -18,7 +19,7 @@ const traverse = (
       url ||= "";
       return {
         title: `${title} > ${breadcrumb}`,
-        icon: "chrome://favicon/" + url,
+        icon: faviconURL(url),
         lastVisitTime: dateAdded,
         url,
       };
@@ -36,7 +37,7 @@ const base: Command[] = [
     command: async function () {
       setInput(KEYWORD + ">");
     },
-    icon: "chrome://bookmarks/",
+    icon: faviconURL("chrome://bookmarks/"),
     keyword: KEYWORD + ">",
   },
 ];

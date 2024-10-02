@@ -2,6 +2,7 @@
 import { resetHistory } from "~/util/last-used";
 import { inputSignal, parsedInput } from "~/util/signals";
 
+import { faviconURL } from "../Entry";
 import { isTruthy } from "../util/isTruthy";
 
 export type Command = {
@@ -78,6 +79,7 @@ const base: Command[] = [
     title: "Open Settings",
     shortcut: "⌘ ,",
     url: "chrome://settings",
+    icon: faviconURL("chrome://settings"),
   },
   {
     title: "Close Current Tab",
