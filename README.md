@@ -1,5 +1,9 @@
 <div align="center">
-<img width="128" src="/src/assets/img/logo.svg" alt="logo"/>
+<p align="center">
+  <img width="400" alt="image" src="https://github.com/user-attachments/assets/67603086-ee31-44cf-9b19-b05ff3edcf0f" style="display: inline-block;"/>
+  <img width="400" alt="image" src="https://github.com/user-attachments/assets/23f2bd61-d58b-45a4-a2e4-b9e4c2613e7d" style="display: inline-block;"/>
+</p>
+
 <h1> Command Palette for Chrome<br/>Fast, no server, no ads, no telemetry.</h1>
 
 ![](https://img.shields.io/badge/Typescript-3178C6?style=flat-square&logo=typescript&logoColor=white)
