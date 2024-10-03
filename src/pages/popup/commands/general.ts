@@ -2,7 +2,6 @@
 import { resetHistory } from "~/util/last-used";
 import { inputSignal, parsedInput } from "~/util/signals";
 
-import { faviconURL } from "../Entry";
 import { isTruthy } from "../util/isTruthy";
 
 export type Command = {
@@ -79,7 +78,6 @@ const base: Command[] = [
     title: "Open Settings",
     shortcut: "⌘ ,",
     url: "chrome://settings",
-    icon: faviconURL("chrome://settings"),
   },
   {
     title: "Close Current Tab",
@@ -263,6 +261,64 @@ const base: Command[] = [
         active: true,
       });
       await chrome.windows.create({ tabId: tab.id });
+    },
+  },
+  {
+    title: "Split screen (vertical)",
+    command: async function () {
+      const [tab] = await chrome.tabs.query({
+        currentWindow: true,
+        active: true,
+      });
+
+      const { availLeft, availTop, availHeight, availWidth } =
+        screen as Screen & { availLeft: number; availTop: number };
+      const currentWindow = await chrome.windows.getCurrent();
+      const halfHeight = Math.floor(availHeight / 2);
+      await chrome.windows.update(currentWindow.id!, {
+        left: availLeft,
+        top: availTop,
+        width: availWidth,
+        height: halfHeight,
+      });
+      // Create a new window with the current tab
+      await chrome.windows.create({
+        tabId: tab.id,
+        left: availLeft,
+        top: availTop + halfHeight,
+        width: availWidth,
+        height: halfHeight,
+        focused: true,
+      });
+    },
+  },
+  {
+    title: "Split screen (horizontal)",
+    command: async function () {
+      const [tab] = await chrome.tabs.query({
+        currentWindow: true,
+        active: true,
+      });
+      //@ts-ignore availLeft is missing from screen
+      const { availLeft, availTop, availHeight, availWidth } =
+        screen as Screen & { availLeft: number; availTop: number };
+      const currentWindow = await chrome.windows.getCurrent();
+      const halfWidth = Math.floor(availWidth / 2);
+      await chrome.windows.update(currentWindow.id!, {
+        left: availLeft,
+        top: availTop,
+        width: halfWidth,
+        height: availHeight,
+      });
+      // Create a new window with the current tab
+      await chrome.windows.create({
+        tabId: tab.id,
+        left: availLeft + halfWidth,
+        top: availTop,
+        width: halfWidth,
+        height: availHeight,
+        focused: true,
+      });
     },
   },
   {
