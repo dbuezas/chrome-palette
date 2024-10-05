@@ -18,7 +18,7 @@
     "serve:prod": "npm run start:prod & npx serve dist & npx --yes open-cli http://localhost:3000/src/pages/popup/ -- 'google chrome' & wait",
     "start": "vite build --watch --mode development --minify false",
     "start:prod": "vite build --watch",
-    "build": "vite build && zip -r chrome-palette.zip dist/",
+    "build": "vite build && rm chrome-palette.zip && zip -r9 chrome-palette.zip dist/",
     "lint": "eslint . --fix -c .eslintrc --ext js,ts --ignore-pattern='!.*'",
     "dev:nodemon": "nodemon",
     "analyse-bundle": "npx vite-bundle-visualizer",
