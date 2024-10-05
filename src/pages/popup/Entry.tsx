@@ -26,18 +26,24 @@ export default function Entry(props: {
   const title = createMemo(() => {
     const txt = props.command.title || "";
     if (!parsedInput().query) return txt;
-    return props.keyResults[0].highlight((t) => <b>{t}</b>) || txt;
+    const r = props.keyResults[0].highlight((t) => <b>{t}</b>);
+    if (r.length === 0) return txt;
+    return r;
   });
   const subtitle = createMemo(() => {
     const txt = props.command.subtitle || "";
     if (!parsedInput().query) return txt;
-    return props.keyResults[1].highlight((t) => <b>{t}</b>) || txt;
+    const r = props.keyResults[1].highlight((t) => <b>{t}</b>);
+    if (r.length === 0) return txt;
+    return r;
   });
   const url = createMemo(() => {
     if (!("url" in props.command)) return "";
     const txt = props.command.url;
     if (!parsedInput().query) return txt;
-    return props.keyResults[2].highlight((t) => <b>{t}</b>) || txt;
+    const r = props.keyResults[2].highlight((t) => <b>{t}</b>);
+    if (r.length === 0) return txt;
+    return r;
   });
   return (
     <li
