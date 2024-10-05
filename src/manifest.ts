@@ -43,7 +43,6 @@ const manifest = defineManifest(async () => ({
     "sessions",
     "bookmarks",
     "management",
-    "system.display",
     "history",
     "favicon",
   ],
