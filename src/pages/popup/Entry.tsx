@@ -1,7 +1,6 @@
 // render inside top level Solid component
 import "./Entry.scss";
 
-import fuzzysort from "fuzzysort";
 import { Show, createEffect, createMemo } from "solid-js";
 import twas from "twas";
 
@@ -27,18 +26,18 @@ export default function Entry(props: {
   const title = createMemo(() => {
     const txt = props.command.title || "";
     if (!parsedInput().query) return txt;
-    return fuzzysort.highlight(props.keyResults[0], (t) => <b>{t}</b>) || txt;
+    return props.keyResults[0].highlight((t) => <b>{t}</b>) || txt;
   });
   const subtitle = createMemo(() => {
     const txt = props.command.subtitle || "";
     if (!parsedInput().query) return txt;
-    return fuzzysort.highlight(props.keyResults[1], (t) => <b>{t}</b>) || txt;
+    return props.keyResults[1].highlight((t) => <b>{t}</b>) || txt;
   });
   const url = createMemo(() => {
     if (!("url" in props.command)) return "";
     const txt = props.command.url;
     if (!parsedInput().query) return txt;
-    return fuzzysort.highlight(props.keyResults[2], (t) => <b>{t}</b>) || txt;
+    return props.keyResults[2].highlight((t) => <b>{t}</b>) || txt;
   });
   return (
     <li
