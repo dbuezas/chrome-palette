@@ -1,7 +1,7 @@
 {
   "name": "chrome-palette",
   "displayName": "Chrome Palette",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "description": "Command Palette for Chrome",
   "license": "MIT",
   "packageManager": "pnpm@9.12.0",

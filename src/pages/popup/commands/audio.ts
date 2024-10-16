@@ -1,5 +1,6 @@
 import { createLazyResource, parsedInput } from "~/util/signals";
 
+import { faviconURL } from "../Entry";
 import { Command } from "./general";
 
 const baseCommands = [
@@ -12,7 +13,7 @@ const commands = createLazyResource(baseCommands, async () => {
   const allTabs = await chrome.tabs.query({ audible: true });
   const actions: Command[] = allTabs.map(({ title, url, id, windowId }) => ({
     title: `Sound/Audio tab: ${title}`,
-    icon: url,
+    icon: faviconURL(url),
     command: () => {
       chrome.tabs.update(id!, { highlighted: true });
       chrome.windows.update(windowId!, { focused: true });
